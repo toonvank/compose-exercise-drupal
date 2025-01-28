@@ -1,0 +1,30 @@
+services:
+  drupal:
+    container_name: drupal
+    image: drupal
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - drupal_network
+    volumes:
+      - ./modules:/var/www/html/modules
+      - ./profiles:/var/www/html/profiles
+      - ./sites:/var/www/html/sites
+      - ./themes:/var/www/html/themes
+  db:
+    container_name: db
+    image: postgres
+    restart: unless-stopped
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    networks:
+      - drupal_network
+    env_file:
+      - .env
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+networks:
+  drupal_network:
